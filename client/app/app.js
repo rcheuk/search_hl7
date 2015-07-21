@@ -9,6 +9,11 @@ angular.module('searchHl7App', [
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
+      .when('/dataViz', {
+        templateUrl: 'app/dataViz/dataViz.html',
+        controller: 'DataVizController',
+        controllerAs: 'dataViz'
+      })
       .otherwise({
         redirectTo: '/'
       });

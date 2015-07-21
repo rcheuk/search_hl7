@@ -21,11 +21,11 @@
     return directive;
 
     /** @ngInject */
-    function NavbarController($location) {
+    function NavbarController($location, $mdSidenav) {
       var ctrl = this;
       ctrl.menu = [{
-        'title': 'Home',
-        'link': '/'
+        'title': 'Data Visualizations Sample',
+        'link': '/dataViz'
       }];
 
       ctrl.isCollapsed = true;
@@ -33,6 +33,10 @@
       ctrl.isActive = function(route) {
         return route === $location.path();
       };
+
+      ctrl.toggleSidenav = function() {
+        $mdSidenav('left').toggle();
+      }
 
     }
   }

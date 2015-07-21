@@ -1,9 +1,9 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./message.controller');
+var suggestions = require('./suggestions.controller');
 var router = express.Router();
 
-router.get('/', controller.index);
+router.get('/suggestions', suggestions.index);
 
 module.exports = router;

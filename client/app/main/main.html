@@ -1,16 +1,17 @@
-<hl7-navbar>
-</hl7-navbar>
-<div layout="row" flex>
-  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('sm')">
+<hl7-navbar></hl7-navbar>
 
+<div layout="row" flex>
+  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    This only remains visible for large screens and disappears for medium/small screens.
   </md-sidenav>
-  <div layout="column" flex id="content">
+
+
+  <div layout="column" flex>
     <md-content layout="column"  layout-align="center center" flex class="md-padding">
-      <search>
-      </search>
-      <results>
-      </results>
-      messgages should shhow up here.
+        <search></search>
+      <div flex class="results" ng-repeat="result in results">
+        <results resultInfo="result"></results>
+      </div>
     </md-content>
   </div>
 </div>
