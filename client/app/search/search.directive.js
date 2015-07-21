@@ -54,7 +54,7 @@
         $log.info('Item changed to ' + JSON.stringify(item));
       }
       /**
-       * Build `states` list of key/value pairs
+       * Build `topHits` list of key/value pairs
        */
       function loadAll() {
         var topHits = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
@@ -66,8 +66,9 @@
                 Wisconsin, Wyoming';
         return topHits.split(/, +/g).map( function (hit) {
           return {
-            value: hit
-          };
+            value: hit.toLowerCase(),
+            display: hit
+          }
         });
       }
       /**
@@ -76,7 +77,7 @@
       function createFilterFor(query) {
         var lowercaseQuery = angular.lowercase(query);
         return function filterFn(hit) {
-          return (hit.value.indexOf(lowercaseQuery) === 0);
+          return (query.value.indexOf(lowercaseQuery) === 0);
         };
       }
 
