@@ -10,9 +10,6 @@
     var directive = {
       restrict: 'E',
       templateUrl: 'components/navbar/navbar.html',
-      scope: {
-          creationDate: '='
-      },
       controller: NavbarController,
       controllerAs: 'ctrl',
       bindToController: true
@@ -21,21 +18,26 @@
     return directive;
 
     /** @ngInject */
-    function NavbarController($location, $mdSidenav) {
+    function NavbarController($location, $mdComponentRegistry) {
       var ctrl = this;
-      ctrl.menu = [{
-        'title': 'Data Visualizations Sample',
-        'link': '/dataViz'
-      }];
-
-      ctrl.isCollapsed = true;
 
       ctrl.isActive = function(route) {
         return route === $location.path();
       };
 
       ctrl.toggleSidenav = function() {
-        $mdSidenav('left').toggle();
+        $mdComponentRegistry.when('left').then(function(it){
+          it.open();
+        });
+        console.log("gtoggle");
+      }
+
+      ctrl.goToHelp = function() {
+        $location.path('/help').replace();
+      }
+
+      ctrl.goToDataViz = function() {
+        $location.path('/dataViz').replace();
       }
 
     }

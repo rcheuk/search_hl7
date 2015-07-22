@@ -1,8 +1,24 @@
-<md-toolbar layout="row">
+<md-toolbar layout="row" layout-align="left center">
   <div class="md-toolbar-tools">
-    <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
-      <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
-    </md-button>
-    <h1 class="md-display-2 t-center">Search HL7 Messages</h1>
+    <md-menu hide-gt-sm class="md-icon-button">
+      <md-button aria-label="Open interactions menu" class="md-icon-button" ng-click="$mdOpenMenu()">
+        <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button ng-click="ctrl.goToHelp()">
+            <i class="material-icons" md-menu-align-target>info_outline</i>
+            Help
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="ctrl.goToDataViz()">
+            <i class="material-icons">trending_up</i>
+            Data Visualizations
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+    <h1 class="md-display-2 t-center" hide-sm>Search HL7 Messages</h1>
   </div>
 </md-toolbar>

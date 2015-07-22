@@ -14,6 +14,11 @@ angular.module('searchHl7App', [
         controller: 'DataVizController',
         controllerAs: 'dataViz'
       })
+      .when('/help', {
+        templateUrl: 'app/help/help.html',
+        controller: 'HelpController',
+        controllerAs: 'help'
+      })
       .otherwise({
         redirectTo: '/'
       });

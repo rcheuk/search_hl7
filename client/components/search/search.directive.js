@@ -8,10 +8,15 @@
   /** @ngInject */
   function search() {
     var directive = {
+      require: '^MainCtrl',
       restrict: 'E',
-      templateUrl: 'app/search/search.html',
+      templateUrl: 'components/search/search.html',
       scope: {
-          query: '&'
+          query: '&',
+          selectedItem: '='
+      },
+      link: function(scope, element, attrs, mainCtrl) {
+        mainCtrl.querySearch(scope.searchText);
       },
       controller: SearchController,
       controllerAs: 'ctrl',
@@ -22,41 +27,57 @@
 
     /** @ngInject */
     function SearchController($http, $q, $log, $timeout) {
-      var ctrl = this;
+      var self = this;
       self.simulateQuery = false;
       self.isDisabled    = false;
+      self.noCache = false;
       self.topHits         = loadAll();
-      self.querySearch   = querySearch;
+      self.querySearch   = query;
       self.selectedItemChange = selectedItemChange;
       self.searchTextChange   = searchTextChange;
-      // ******************************
-      // Internal methods
-      // ******************************
-      /**
-       * Search for states... use $timeout to simulate
-       * remote dataservice call.
-       */
-      function querySearch (query) {
+
+
+      /*function querySearch (query) {
         var results = query ? ctrl.topHits.filter( createFilterFor(query) ) : ctrl.topHits,
             deferred;
         if (ctrl.simulateQuery) {
           deferred = $q.defer();
-          $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+          $timeout(
+            function () {
+              deferred.resolve( results );
+            }, Math.random() * 1000, false);
           return deferred.promise;
         } else {
           return results;
         }
-      }
-      function searchTextChange(text) {
+      }*/
+
+      $scope.searchTextChange = function(text) {
         $log.info('Text changed to ' + text);
+        console.log('text changed to ' + text);
+        $scope.searchText = text;
       }
-      function selectedItemChange(item) {
+
+      $scope.selectedItemChange = function(item) {
+        $scope.selectedItem = item;
+        console.log('item', item);
         $log.info('Item changed to ' + JSON.stringify(item));
+        $http.get('/api/messages').success(function(messages) {
+          $scope.results = messages;
+          console.log("messages", messages);
+        });
       }
-      /**
-       * Build `topHits` list of key/value pairs
-       */
+
       function loadAll() {
+        $http.get('/api/suggestions').success(function(result) {
+          self.result = result.map(function(v) {
+            return {
+              value: v,
+              display: v
+            }
+          });
+          console.log('result', self.result);
+        });
         var topHits = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
                 Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
                 Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
@@ -64,23 +85,14 @@
                 North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
                 South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
                 Wisconsin, Wyoming';
-        return topHits.split(/, +/g).map( function (hit) {
+        /*return topHits.split(/, +/g).map( function (hit) {
           return {
             value: hit.toLowerCase(),
             display: hit
           }
-        });
+        });*/
+        return self.result;
       }
-      /**
-       * Create filter function for a query string
-       */
-      function createFilterFor(query) {
-        var lowercaseQuery = angular.lowercase(query);
-        return function filterFn(hit) {
-          return (query.value.indexOf(lowercaseQuery) === 0);
-        };
-      }
-
     }
   }
 
