@@ -14,23 +14,7 @@ angular.module('searchHl7App')
 
     initialize();
 
-    $scope.searchTextChange = function(text) {
-      $log.info('Text changed to ' + text);
-      console.log('text changed to ' + text);
-      $scope.searchText = text;
-    }
-
-    $scope.selectedItemChange = function(item) {
-      $scope.selectedItem = item;
-      console.log('item', item);
-      $log.info('Item changed to ' + JSON.stringify(item));
-      $http.get('/api/messages').success(function(messages) {
-        $scope.results = messages;
-        console.log("messages", messages);
-      });
-    }
-
-    $scope.querySearch = function (query) {
+    /*$scope.querySearch = function (query) {
       var results = query ? ctrl.topHits.filter( createFilterFor(query) ) : ctrl.topHits,
           deferred;
       if (ctrl.simulateQuery) {
@@ -43,7 +27,18 @@ angular.module('searchHl7App')
       } else {
         return results;
       }
+    }*/
+
+    $scope.querySearch = function(item) {
+      $scope.selectedItem = item;
+      console.log('item', item);
+      $log.info('Item changed to ' + JSON.stringify(item));
+      $http.get('/api/messages').success(function(messages) {
+        $scope.results = messages;
+        console.log("messages", messages);
+      });
     }
+
 
     /**
      * Create filter function for a query string
@@ -54,5 +49,5 @@ angular.module('searchHl7App')
         return (query.value.indexOf(lowercaseQuery) === 0);
       };
     }
-    
+
   });

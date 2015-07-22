@@ -8,15 +8,11 @@
   /** @ngInject */
   function search() {
     var directive = {
-      require: '^MainCtrl',
       restrict: 'E',
       templateUrl: 'components/search/search.html',
       scope: {
           query: '&',
           selectedItem: '='
-      },
-      link: function(scope, element, attrs, mainCtrl) {
-        mainCtrl.querySearch(scope.searchText);
       },
       controller: SearchController,
       controllerAs: 'ctrl',
@@ -26,16 +22,16 @@
     return directive;
 
     /** @ngInject */
-    function SearchController($http, $q, $log, $timeout) {
+    function SearchController($scope, $http, $q, $log, $timeout) {
       var self = this;
       self.simulateQuery = false;
       self.isDisabled    = false;
       self.noCache = false;
       self.topHits         = loadAll();
-      self.querySearch   = query;
+      self.querySearch   = $scope.query;
       self.selectedItemChange = selectedItemChange;
       self.searchTextChange   = searchTextChange;
-
+console.log('scope query', $scope.query);
 
       /*function querySearch (query) {
         var results = query ? ctrl.topHits.filter( createFilterFor(query) ) : ctrl.topHits,
@@ -52,15 +48,13 @@
         }
       }*/
 
-      $scope.searchTextChange = function(text) {
+      function searchTextChange(text) {
         $log.info('Text changed to ' + text);
-        console.log('text changed to ' + text);
         $scope.searchText = text;
       }
 
-      $scope.selectedItemChange = function(item) {
+      function selectedItemChange(item) {
         $scope.selectedItem = item;
-        console.log('item', item);
         $log.info('Item changed to ' + JSON.stringify(item));
         $http.get('/api/messages').success(function(messages) {
           $scope.results = messages;
